@@ -34,7 +34,6 @@
   .radio-option { display: flex; align-items: center; gap: 6px; background: #f4f6fb; border: 0.5px solid #d0d9e8; border-radius: 8px; padding: 7px 14px; cursor: pointer; font-size: 14px; transition: all 0.15s; }
   .radio-option:hover { border-color: #2E75B6; background: #eef4fb; }
   .radio-option input { accent-color: #2E75B6; width: 15px; height: 15px; cursor: pointer; }
-  .radio-option.selected { background: #eef4fb; border-color: #2E75B6; color: #1F4E79; font-weight: 500; }
 
   .likert-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
   .likert-table thead tr { background: #1F4E79; }
@@ -61,351 +60,249 @@
 
   .required { color: #d32f2f; margin-left: 2px; }
   .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media(max-width: 600px) { .field-row { grid-template-columns: 1fr; } .section-card { padding: 20px 16px; } }
-
-  .script-box { background: #1a1a2e; color: #a8d8a8; border-radius: 10px; padding: 20px; font-family: 'Courier New', monospace; font-size: 12.5px; white-space: pre; overflow-x: auto; margin-top: 12px; line-height: 1.7; }
-  .script-section { background: #fff; border-radius: 12px; border: 0.5px solid #dde3ef; padding: 28px 32px; margin-bottom: 24px; }
-  .script-section h2 { font-size: 16px; font-weight: 700; color: #1F4E79; margin-bottom: 6px; }
-  .script-section p { font-size: 14px; color: #5f7fa8; margin-bottom: 10px; }
-  .step-badge { display: inline-block; background: #1F4E79; color: #fff; border-radius: 50%; width: 22px; height: 22px; text-align: center; line-height: 22px; font-size: 12px; font-weight: 700; margin-right: 8px; }
-  .copy-btn { padding: 6px 16px; background: #2E75B6; color: #fff; border: none; border-radius: 6px; font-size: 13px; cursor: pointer; margin-top: 10px; }
-  .copy-btn:hover { background: #1F4E79; }
-  .tabs { display: flex; gap: 0; margin-bottom: 24px; border-bottom: 2px solid #dde3ef; }
-  .tab-btn { padding: 10px 22px; background: none; border: none; font-size: 14px; font-weight: 500; color: #5f7fa8; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
-  .tab-btn.active { color: #1F4E79; border-bottom-color: #2E75B6; }
-  .tab-pane { display: none; }
-  .tab-pane.active { display: block; }
+  @media(max-width: 600px) { .field-row { grid-template-columns: 1fr; } .section-card { padding: 20px 16px; } .survey-header { padding: 24px 20px 18px; } }
 </style>
 </head>
 <body>
 <div class="page">
 
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('survey')">Survey Form</button>
-    <button class="tab-btn" onclick="switchTab('script')">Google Apps Script</button>
+  <div class="survey-header">
+    <h1>Tamil Nadu Tourism Research Survey</h1>
+    <div class="subtitle">Digital Literacy, Marketing Exposure &amp; Tourist Healthcare Awareness</div>
+    <p>Influencing Travel Planning Intentions — The Moderating Role of Artificial Intelligence<br>
+    Estimated time: 8–10 minutes &nbsp;|&nbsp; 7-point Likert scale used for Sections B–F</p>
   </div>
 
-  <!-- ===== SURVEY TAB ===== -->
-  <div id="tab-survey" class="tab-pane active">
+  <div class="consent-box">
+    <strong>Participant Information &amp; Consent</strong>
+    This survey is part of an academic research study. Your participation is voluntary and completely anonymous.
+    All responses are confidential and used solely for research purposes.
+    <br><br>
+    <strong>Eligibility:</strong> Permanent resident of Tamil Nadu &nbsp;|&nbsp; Age 18+ &nbsp;|&nbsp; At least one leisure trip in the last 12 months.
+  </div>
 
-    <div class="survey-header">
-      <h1>Tamil Nadu Tourism Research Survey</h1>
-      <div class="subtitle">Digital Literacy, Marketing Exposure & Tourist Healthcare Awareness</div>
-      <p>Influencing Travel Planning Intentions — The Moderating Role of Artificial Intelligence<br>
-      Estimated time: 8–10 minutes &nbsp;|&nbsp; 7-point Likert scale used for Sections B–F</p>
-    </div>
+  <div class="progress-label" id="progress-label">0 of 20 Likert items answered</div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:5%"></div></div>
 
-    <div class="consent-box">
-      <strong>Participant Information & Consent</strong>
-      This survey is part of an academic research study. Your participation is voluntary and completely anonymous.
-      All responses are confidential and used solely for research purposes.
-      <br><br>
-      <strong>Eligibility:</strong> Permanent resident of Tamil Nadu &nbsp;|&nbsp; Age 18+ &nbsp;|&nbsp; At least one leisure trip in the last 12 months.
-    </div>
+  <!-- SECTION A -->
+  <div class="section-card">
+    <div class="section-title">Section A — Demographic Profile</div>
+    <div class="section-note">Please select the most appropriate option for each item.</div>
 
-    <div class="progress-label" id="progress-label">Section 1 of 6</div>
-    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:14%"></div></div>
-
-    <!-- SECTION A: Demographics -->
-    <div class="section-card">
-      <div class="section-title">Section A — Demographic Profile</div>
-      <div class="section-note">Please select the most appropriate option for each item.</div>
-
-      <div class="field-row">
-        <div class="field">
-          <label>A1. Gender <span class="required">*</span></label>
-          <div class="radio-group" id="gender-group">
-            <label class="radio-option"><input type="radio" name="gender" value="Male"> Male</label>
-            <label class="radio-option"><input type="radio" name="gender" value="Female"> Female</label>
-            <label class="radio-option"><input type="radio" name="gender" value="Prefer not to say"> Prefer not to say</label>
-          </div>
-        </div>
-        <div class="field">
-          <label for="age">A2. Age <span class="required">*</span></label>
-          <select id="age" name="age">
-            <option value="">Select age range</option>
-            <option>18–25 years</option>
-            <option>26–35 years</option>
-            <option>36–45 years</option>
-            <option>46–55 years</option>
-            <option>56 years and above</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="field-row">
-        <div class="field">
-          <label for="education">A3. Educational Qualification <span class="required">*</span></label>
-          <select id="education" name="education">
-            <option value="">Select qualification</option>
-            <option>Below Secondary (10th)</option>
-            <option>Higher Secondary (12th)</option>
-            <option>Undergraduate (UG)</option>
-            <option>Postgraduate (PG)</option>
-            <option>Doctorate / Professional Degree</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="occupation">A4. Occupation <span class="required">*</span></label>
-          <select id="occupation" name="occupation">
-            <option value="">Select occupation</option>
-            <option>Student</option>
-            <option>Salaried – Private</option>
-            <option>Salaried – Government</option>
-            <option>Self-Employed / Business</option>
-            <option>Homemaker</option>
-            <option>Retired</option>
-            <option>Other</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="field-row">
-        <div class="field">
-          <label for="income">A5. Monthly Household Income <span class="required">*</span></label>
-          <select id="income" name="income">
-            <option value="">Select income range</option>
-            <option>Below ₹15,000</option>
-            <option>₹15,001 – ₹30,000</option>
-            <option>₹30,001 – ₹50,000</option>
-            <option>₹50,001 – ₹1,00,000</option>
-            <option>Above ₹1,00,000</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="zone">A6. Geographic Zone (Tamil Nadu) <span class="required">*</span></label>
-          <select id="zone" name="zone">
-            <option value="">Select zone</option>
-            <option>Chennai Metropolitan</option>
-            <option>Coimbatore–Erode</option>
-            <option>Madurai–Trichy</option>
-            <option>Salem–Vellore</option>
-            <option>Tirunelveli–Thoothukudi</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="field-row">
-        <div class="field">
-          <label>A7. Residence Type <span class="required">*</span></label>
-          <div class="radio-group">
-            <label class="radio-option"><input type="radio" name="residence" value="Urban"> Urban</label>
-            <label class="radio-option"><input type="radio" name="residence" value="Semi-Urban"> Semi-Urban</label>
-            <label class="radio-option"><input type="radio" name="residence" value="Rural"> Rural</label>
-          </div>
-        </div>
-        <div class="field">
-          <label for="travel_freq">A8. Travel Frequency (last 12 months) <span class="required">*</span></label>
-          <select id="travel_freq" name="travel_freq">
-            <option value="">Select frequency</option>
-            <option>1 trip</option>
-            <option>2–3 trips</option>
-            <option>4–5 trips</option>
-            <option>More than 5 trips</option>
-          </select>
-        </div>
-      </div>
-
+    <div class="field-row">
       <div class="field">
-        <label for="ai_tool">A9. Primary AI Tool Used for Travel Planning</label>
-        <select id="ai_tool" name="ai_tool">
-          <option value="">Select tool</option>
-          <option>ChatGPT</option>
-          <option>Google Bard / Gemini</option>
-          <option>Microsoft Copilot</option>
-          <option>Built-in assistant (Siri / Google Assistant)</option>
-          <option>I do not use AI for travel planning</option>
+        <label>A1. Gender <span class="required">*</span></label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="gender" value="Male"> Male</label>
+          <label class="radio-option"><input type="radio" name="gender" value="Female"> Female</label>
+          <label class="radio-option"><input type="radio" name="gender" value="Prefer not to say"> Prefer not to say</label>
+        </div>
+      </div>
+      <div class="field">
+        <label for="age">A2. Age <span class="required">*</span></label>
+        <select id="age" name="age">
+          <option value="">Select age range</option>
+          <option>18–25 years</option>
+          <option>26–35 years</option>
+          <option>36–45 years</option>
+          <option>46–55 years</option>
+          <option>56 years and above</option>
         </select>
       </div>
     </div>
 
-    <!-- SECTION B: Digital Literacy -->
-    <div class="section-card">
-      <div class="section-title">Section B — Digital Literacy (DL)</div>
-      <div class="section-note">Rate your agreement: 1 = Strongly Disagree &nbsp; 4 = Neutral &nbsp; 7 = Strongly Agree</div>
-      <table class="likert-table">
-        <thead>
-          <tr>
-            <th>Statement</th>
-            <th>1<br><span style="font-weight:400;font-size:11px">Strongly<br>Disagree</span></th>
-            <th>2</th><th>3</th>
-            <th>4<br><span style="font-weight:400;font-size:11px">Neutral</span></th>
-            <th>5</th><th>6</th>
-            <th>7<br><span style="font-weight:400;font-size:11px">Strongly<br>Agree</span></th>
-          </tr>
-        </thead>
-        <tbody id="likert-dl"></tbody>
-      </table>
-    </div>
-
-    <!-- SECTION C: Marketing Exposure -->
-    <div class="section-card">
-      <div class="section-title">Section C — Marketing Exposure (ME)</div>
-      <div class="section-note">Rate your agreement: 1 = Strongly Disagree &nbsp; 4 = Neutral &nbsp; 7 = Strongly Agree</div>
-      <table class="likert-table">
-        <thead>
-          <tr>
-            <th>Statement</th>
-            <th>1<br><span style="font-weight:400;font-size:11px">Strongly<br>Disagree</span></th>
-            <th>2</th><th>3</th>
-            <th>4<br><span style="font-weight:400;font-size:11px">Neutral</span></th>
-            <th>5</th><th>6</th>
-            <th>7<br><span style="font-weight:400;font-size:11px">Strongly<br>Agree</span></th>
-          </tr>
-        </thead>
-        <tbody id="likert-me"></tbody>
-      </table>
-    </div>
-
-    <!-- SECTION D: Healthcare Awareness -->
-    <div class="section-card">
-      <div class="section-title">Section D — Tourist Healthcare Awareness (HA)</div>
-      <div class="section-note">Rate your agreement: 1 = Strongly Disagree &nbsp; 4 = Neutral &nbsp; 7 = Strongly Agree</div>
-      <table class="likert-table">
-        <thead>
-          <tr>
-            <th>Statement</th>
-            <th>1<br><span style="font-weight:400;font-size:11px">Strongly<br>Disagree</span></th>
-            <th>2</th><th>3</th>
-            <th>4<br><span style="font-weight:400;font-size:11px">Neutral</span></th>
-            <th>5</th><th>6</th>
-            <th>7<br><span style="font-weight:400;font-size:11px">Strongly<br>Agree</span></th>
-          </tr>
-        </thead>
-        <tbody id="likert-ha"></tbody>
-      </table>
-    </div>
-
-    <!-- SECTION E: Use of AI -->
-    <div class="section-card">
-      <div class="section-title">Section E — Use of Artificial Intelligence (UOA)</div>
-      <div class="section-note">Rate your agreement: 1 = Strongly Disagree &nbsp; 4 = Neutral &nbsp; 7 = Strongly Agree</div>
-      <table class="likert-table">
-        <thead>
-          <tr>
-            <th>Statement</th>
-            <th>1<br><span style="font-weight:400;font-size:11px">Strongly<br>Disagree</span></th>
-            <th>2</th><th>3</th>
-            <th>4<br><span style="font-weight:400;font-size:11px">Neutral</span></th>
-            <th>5</th><th>6</th>
-            <th>7<br><span style="font-weight:400;font-size:11px">Strongly<br>Agree</span></th>
-          </tr>
-        </thead>
-        <tbody id="likert-uoa"></tbody>
-      </table>
-    </div>
-
-    <!-- SECTION F: Travel Planning Intention -->
-    <div class="section-card">
-      <div class="section-title">Section F — Travel Planning Intention (TPI)</div>
-      <div class="section-note">Rate your agreement: 1 = Strongly Disagree &nbsp; 4 = Neutral &nbsp; 7 = Strongly Agree</div>
-      <table class="likert-table">
-        <thead>
-          <tr>
-            <th>Statement</th>
-            <th>1<br><span style="font-weight:400;font-size:11px">Strongly<br>Disagree</span></th>
-            <th>2</th><th>3</th>
-            <th>4<br><span style="font-weight:400;font-size:11px">Neutral</span></th>
-            <th>5</th><th>6</th>
-            <th>7<br><span style="font-weight:400;font-size:11px">Strongly<br>Agree</span></th>
-          </tr>
-        </thead>
-        <tbody id="likert-tpi"></tbody>
-      </table>
-    </div>
-
-    <!-- Submit -->
-    <div class="section-card">
+    <div class="field-row">
       <div class="field">
-        <label for="script_url" style="font-weight:600;color:#1F4E79;">Google Apps Script URL <span class="required">*</span></label>
-        <input type="text" id="script_url" placeholder="https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec" style="font-size:13px;">
-        <p style="font-size:12px;color:#5f7fa8;margin-top:6px;">Paste your deployed Apps Script URL here. See the "Google Apps Script" tab for setup instructions.</p>
+        <label for="education">A3. Educational Qualification <span class="required">*</span></label>
+        <select id="education">
+          <option value="">Select qualification</option>
+          <option>Below Secondary (10th)</option>
+          <option>Higher Secondary (12th)</option>
+          <option>Undergraduate (UG)</option>
+          <option>Postgraduate (PG)</option>
+          <option>Doctorate / Professional Degree</option>
+        </select>
       </div>
-      <button class="submit-btn" onclick="submitSurvey()" id="submit-btn">Submit Survey Response</button>
-      <div class="status-msg" id="status-msg"></div>
+      <div class="field">
+        <label for="occupation">A4. Occupation <span class="required">*</span></label>
+        <select id="occupation">
+          <option value="">Select occupation</option>
+          <option>Student</option>
+          <option>Salaried – Private</option>
+          <option>Salaried – Government</option>
+          <option>Self-Employed / Business</option>
+          <option>Homemaker</option>
+          <option>Retired</option>
+          <option>Other</option>
+        </select>
+      </div>
     </div>
 
-  </div><!-- end survey tab -->
+    <div class="field-row">
+      <div class="field">
+        <label for="income">A5. Monthly Household Income <span class="required">*</span></label>
+        <select id="income">
+          <option value="">Select income range</option>
+          <option>Below ₹15,000</option>
+          <option>₹15,001 – ₹30,000</option>
+          <option>₹30,001 – ₹50,000</option>
+          <option>₹50,001 – ₹1,00,000</option>
+          <option>Above ₹1,00,000</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="zone">A6. Geographic Zone (Tamil Nadu) <span class="required">*</span></label>
+        <select id="zone">
+          <option value="">Select zone</option>
+          <option>Chennai Metropolitan</option>
+          <option>Coimbatore–Erode</option>
+          <option>Madurai–Trichy</option>
+          <option>Salem–Vellore</option>
+          <option>Tirunelveli–Thoothukudi</option>
+        </select>
+      </div>
+    </div>
 
-  <!-- ===== GOOGLE APPS SCRIPT TAB ===== -->
-  <div id="tab-script" class="tab-pane">
-    <div class="script-section">
-      <h2>How to set up Google Apps Script + Google Sheet</h2>
-      <p>Follow these steps once — then paste your URL into the survey form and you're live.</p>
+    <div class="field-row">
+      <div class="field">
+        <label>A7. Residence Type <span class="required">*</span></label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="residence" value="Urban"> Urban</label>
+          <label class="radio-option"><input type="radio" name="residence" value="Semi-Urban"> Semi-Urban</label>
+          <label class="radio-option"><input type="radio" name="residence" value="Rural"> Rural</label>
+        </div>
+      </div>
+      <div class="field">
+        <label for="travel_freq">A8. Travel Frequency (last 12 months) <span class="required">*</span></label>
+        <select id="travel_freq">
+          <option value="">Select frequency</option>
+          <option>1 trip</option>
+          <option>2–3 trips</option>
+          <option>4–5 trips</option>
+          <option>More than 5 trips</option>
+        </select>
+      </div>
+    </div>
 
-      <p><span class="step-badge">1</span> Go to <strong>sheets.google.com</strong> and create a new spreadsheet. Name it <em>Tamil Nadu Tourism Survey Data</em>.</p>
-      <p><span class="step-badge">2</span> Copy the Sheet ID from the URL bar (the long string between <code>/d/</code> and <code>/edit</code>).</p>
-      <p><span class="step-badge">3</span> Go to <strong>script.google.com</strong> → New Project → paste the code below → replace <code>YOUR_SHEET_ID</code>.</p>
-      <p><span class="step-badge">4</span> Click <strong>Deploy → New Deployment → Web App</strong>. Set "Execute as: Me" and "Who has access: Anyone". Click Deploy and copy the URL.</p>
-      <p><span class="step-badge">5</span> Paste that URL into the survey form's Script URL field.</p>
-
-      <button class="copy-btn" onclick="copyScript()">Copy Script Code</button>
-      <div class="script-box" id="script-code">function doPost(e) {
-  try {
-    var sheet = SpreadsheetApp
-      .openById("YOUR_SHEET_ID")
-      .getSheetByName("Responses");
-
-    if (!sheet) {
-      sheet = SpreadsheetApp.openById("YOUR_SHEET_ID").insertSheet("Responses");
-    }
-
-    // Add header row if sheet is empty
-    if (sheet.getLastRow() === 0) {
-      sheet.appendRow([
-        "Timestamp",
-        "Gender", "Age", "Education", "Occupation", "Income",
-        "Zone", "Residence", "Travel Frequency", "AI Tool Used",
-        "DL1", "DL2", "DL3", "DL4",
-        "ME1", "ME2", "ME3", "ME4",
-        "HA1", "HA2", "HA3", "HA4",
-        "UOA1", "UOA2", "UOA3", "UOA4",
-        "TPI1", "TPI2", "TPI3", "TPI4"
-      ]);
-    }
-
-    var data = JSON.parse(e.postData.contents);
-
-    sheet.appendRow([
-      new Date().toISOString(),
-      data.gender       || "",
-      data.age          || "",
-      data.education    || "",
-      data.occupation   || "",
-      data.income       || "",
-      data.zone         || "",
-      data.residence    || "",
-      data.travel_freq  || "",
-      data.ai_tool      || "",
-      data.DL1 || "", data.DL2 || "", data.DL3 || "", data.DL4 || "",
-      data.ME1 || "", data.ME2 || "", data.ME3 || "", data.ME4 || "",
-      data.HA1 || "", data.HA2 || "", data.HA3 || "", data.HA4 || "",
-      data.UOA1 || "", data.UOA2 || "", data.UOA3 || "", data.UOA4 || "",
-      data.TPI1 || "", data.TPI2 || "", data.TPI3 || "", data.TPI4 || ""
-    ]);
-
-    return ContentService
-      .createTextOutput(JSON.stringify({ status: "success", message: "Response saved." }))
-      .setMimeType(ContentService.MimeType.JSON);
-
-  } catch (err) {
-    return ContentService
-      .createTextOutput(JSON.stringify({ status: "error", message: err.toString() }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-}
-
-function doGet(e) {
-  return ContentService
-    .createTextOutput(JSON.stringify({ status: "ok", message: "Survey endpoint is live." }))
-    .setMimeType(ContentService.MimeType.JSON);
-}</div>
+    <div class="field">
+      <label for="ai_tool">A9. Primary AI Tool Used for Travel Planning</label>
+      <select id="ai_tool">
+        <option value="">Select tool</option>
+        <option>ChatGPT</option>
+        <option>Google Bard / Gemini</option>
+        <option>Microsoft Copilot</option>
+        <option>Built-in assistant (Siri / Google Assistant)</option>
+        <option>I do not use AI for travel planning</option>
+      </select>
     </div>
   </div>
 
-</div><!-- end page -->
+  <!-- SECTION B -->
+  <div class="section-card">
+    <div class="section-title">Section B — Digital Literacy (DL)</div>
+    <div class="section-note">Rate your agreement: 1 = Strongly Disagree &nbsp; 4 = Neutral &nbsp; 7 = Strongly Agree</div>
+    <table class="likert-table">
+      <thead>
+        <tr>
+          <th>Statement</th>
+          <th>1<br><span style="font-weight:400;font-size:11px">Strongly<br>Disagree</span></th>
+          <th>2</th><th>3</th>
+          <th>4<br><span style="font-weight:400;font-size:11px">Neutral</span></th>
+          <th>5</th><th>6</th>
+          <th>7<br><span style="font-weight:400;font-size:11px">Strongly<br>Agree</span></th>
+        </tr>
+      </thead>
+      <tbody id="likert-dl"></tbody>
+    </table>
+  </div>
+
+  <!-- SECTION C -->
+  <div class="section-card">
+    <div class="section-title">Section C — Marketing Exposure (ME)</div>
+    <div class="section-note">Rate your agreement: 1 = Strongly Disagree &nbsp; 4 = Neutral &nbsp; 7 = Strongly Agree</div>
+    <table class="likert-table">
+      <thead>
+        <tr>
+          <th>Statement</th>
+          <th>1<br><span style="font-weight:400;font-size:11px">Strongly<br>Disagree</span></th>
+          <th>2</th><th>3</th>
+          <th>4<br><span style="font-weight:400;font-size:11px">Neutral</span></th>
+          <th>5</th><th>6</th>
+          <th>7<br><span style="font-weight:400;font-size:11px">Strongly<br>Agree</span></th>
+        </tr>
+      </thead>
+      <tbody id="likert-me"></tbody>
+    </table>
+  </div>
+
+  <!-- SECTION D -->
+  <div class="section-card">
+    <div class="section-title">Section D — Tourist Healthcare Awareness (HA)</div>
+    <div class="section-note">Rate your agreement: 1 = Strongly Disagree &nbsp; 4 = Neutral &nbsp; 7 = Strongly Agree</div>
+    <table class="likert-table">
+      <thead>
+        <tr>
+          <th>Statement</th>
+          <th>1<br><span style="font-weight:400;font-size:11px">Strongly<br>Disagree</span></th>
+          <th>2</th><th>3</th>
+          <th>4<br><span style="font-weight:400;font-size:11px">Neutral</span></th>
+          <th>5</th><th>6</th>
+          <th>7<br><span style="font-weight:400;font-size:11px">Strongly<br>Agree</span></th>
+        </tr>
+      </thead>
+      <tbody id="likert-ha"></tbody>
+    </table>
+  </div>
+
+  <!-- SECTION E -->
+  <div class="section-card">
+    <div class="section-title">Section E — Use of Artificial Intelligence (UOA)</div>
+    <div class="section-note">Rate your agreement: 1 = Strongly Disagree &nbsp; 4 = Neutral &nbsp; 7 = Strongly Agree</div>
+    <table class="likert-table">
+      <thead>
+        <tr>
+          <th>Statement</th>
+          <th>1<br><span style="font-weight:400;font-size:11px">Strongly<br>Disagree</span></th>
+          <th>2</th><th>3</th>
+          <th>4<br><span style="font-weight:400;font-size:11px">Neutral</span></th>
+          <th>5</th><th>6</th>
+          <th>7<br><span style="font-weight:400;font-size:11px">Strongly<br>Agree</span></th>
+        </tr>
+      </thead>
+      <tbody id="likert-uoa"></tbody>
+    </table>
+  </div>
+
+  <!-- SECTION F -->
+  <div class="section-card">
+    <div class="section-title">Section F — Travel Planning Intention (TPI)</div>
+    <div class="section-note">Rate your agreement: 1 = Strongly Disagree &nbsp; 4 = Neutral &nbsp; 7 = Strongly Agree</div>
+    <table class="likert-table">
+      <thead>
+        <tr>
+          <th>Statement</th>
+          <th>1<br><span style="font-weight:400;font-size:11px">Strongly<br>Disagree</span></th>
+          <th>2</th><th>3</th>
+          <th>4<br><span style="font-weight:400;font-size:11px">Neutral</span></th>
+          <th>5</th><th>6</th>
+          <th>7<br><span style="font-weight:400;font-size:11px">Strongly<br>Agree</span></th>
+        </tr>
+      </thead>
+      <tbody id="likert-tpi"></tbody>
+    </table>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="section-card">
+    <button class="submit-btn" onclick="submitSurvey()" id="submit-btn">Submit Survey Response</button>
+    <div class="status-msg" id="status-msg"></div>
+  </div>
+
+</div>
 
 <script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby8uB04krNkUJaHxrgqqQ6nSkxpKe4f1TpOATvBEfEUIdv4sAM1h1vrIK6hFFHKvZ0t/exec";
+
 const questions = {
   dl: [
     "DL1: I can confidently use digital devices (smartphone, laptop, tablet) to search for travel information and make bookings online.",
@@ -459,15 +356,16 @@ buildLikert('likert-ha',  questions.ha,  'HA');
 buildLikert('likert-uoa', questions.uoa, 'UOA');
 buildLikert('likert-tpi', questions.tpi, 'TPI');
 
+const allLikert = ['DL1','DL2','DL3','DL4','ME1','ME2','ME3','ME4','HA1','HA2','HA3','HA4','UOA1','UOA2','UOA3','UOA4','TPI1','TPI2','TPI3','TPI4'];
+
 function updateProgress() {
-  const total = 20;
   let answered = 0;
-  ['DL1','DL2','DL3','DL4','ME1','ME2','ME3','ME4','HA1','HA2','HA3','HA4','UOA1','UOA2','UOA3','UOA4','TPI1','TPI2','TPI3','TPI4'].forEach(name => {
+  allLikert.forEach(name => {
     if (document.querySelector(`input[name="${name}"]:checked`)) answered++;
   });
-  const pct = Math.round((answered / total) * 86) + 14;
+  const pct = Math.round((answered / 20) * 95) + 5;
   document.getElementById('progress-fill').style.width = pct + '%';
-  document.getElementById('progress-label').textContent = `${answered} of ${total} Likert items answered`;
+  document.getElementById('progress-label').textContent = `${answered} of 20 Likert items answered`;
 }
 
 function getRadio(name) {
@@ -475,51 +373,40 @@ function getRadio(name) {
   return el ? el.value : null;
 }
 
-function switchTab(tab) {
-  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + tab).classList.add('active');
-  event.target.classList.add('active');
-}
-
-function copyScript() {
-  const text = document.getElementById('script-code').textContent;
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = event.target;
-    btn.textContent = 'Copied!';
-    setTimeout(() => btn.textContent = 'Copy Script Code', 2000);
-  });
-}
-
 async function submitSurvey() {
-  const scriptUrl = document.getElementById('script_url').value.trim();
   const statusEl = document.getElementById('status-msg');
   statusEl.className = 'status-msg';
 
-  if (!scriptUrl || !scriptUrl.startsWith('https://script.google.com')) {
-    statusEl.className = 'status-msg error';
-    statusEl.textContent = 'Please paste a valid Google Apps Script URL before submitting.';
-    return;
-  }
+  const requiredDemog = [
+    { id: 'gender',      radio: true },
+    { id: 'age',         radio: false },
+    { id: 'education',   radio: false },
+    { id: 'occupation',  radio: false },
+    { id: 'income',      radio: false },
+    { id: 'zone',        radio: false },
+    { id: 'residence',   radio: true },
+    { id: 'travel_freq', radio: false }
+  ];
 
-  const required = ['gender','age','education','occupation','income','zone','residence','travel_freq'];
-  for (let f of required) {
-    const el = document.querySelector(`[name="${f}"]`) || document.getElementById(f);
-    const val = el ? (el.value || getRadio(f)) : null;
+  for (let f of requiredDemog) {
+    const val = f.radio ? getRadio(f.id) : document.getElementById(f.id).value;
     if (!val) {
       statusEl.className = 'status-msg error';
-      statusEl.textContent = `Please complete all required demographic fields (Section A).`;
+      statusEl.textContent = 'Please complete all required fields in Section A (Demographic Profile).';
+      const el = f.radio
+        ? document.querySelector(`input[name="${f.id}"]`)
+        : document.getElementById(f.id);
       el && el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
   }
 
-  const likertFields = ['DL1','DL2','DL3','DL4','ME1','ME2','ME3','ME4','HA1','HA2','HA3','HA4','UOA1','UOA2','UOA3','UOA4','TPI1','TPI2','TPI3','TPI4'];
-  for (let f of likertFields) {
+  for (let f of allLikert) {
     if (!getRadio(f)) {
       statusEl.className = 'status-msg error';
       statusEl.textContent = `Please answer all Likert scale items. Missing: ${f}`;
-      document.querySelector(`input[name="${f}"]`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const el = document.querySelector(`input[name="${f}"]`);
+      el && el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
   }
@@ -533,28 +420,25 @@ async function submitSurvey() {
     zone:        document.getElementById('zone').value,
     residence:   getRadio('residence'),
     travel_freq: document.getElementById('travel_freq').value,
-    ai_tool:     document.getElementById('ai_tool').value,
-    DL1: getRadio('DL1'), DL2: getRadio('DL2'), DL3: getRadio('DL3'), DL4: getRadio('DL4'),
-    ME1: getRadio('ME1'), ME2: getRadio('ME2'), ME3: getRadio('ME3'), ME4: getRadio('ME4'),
-    HA1: getRadio('HA1'), HA2: getRadio('HA2'), HA3: getRadio('HA3'), HA4: getRadio('HA4'),
-    UOA1: getRadio('UOA1'), UOA2: getRadio('UOA2'), UOA3: getRadio('UOA3'), UOA4: getRadio('UOA4'),
-    TPI1: getRadio('TPI1'), TPI2: getRadio('TPI2'), TPI3: getRadio('TPI3'), TPI4: getRadio('TPI4')
+    ai_tool:     document.getElementById('ai_tool').value
   };
+
+  allLikert.forEach(k => { data[k] = getRadio(k); });
 
   const btn = document.getElementById('submit-btn');
   btn.disabled = true;
-  btn.textContent = 'Submitting...';
+  btn.textContent = 'Submitting…';
 
   try {
-    await fetch(scriptUrl, { method: 'POST', body: JSON.stringify(data), mode: 'no-cors' });
+    await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(data), mode: 'no-cors' });
     statusEl.className = 'status-msg success';
-    statusEl.textContent = 'Thank you! Your response has been submitted successfully. Your data is now saved in the Google Sheet.';
-    btn.textContent = 'Submitted';
+    statusEl.textContent = 'Thank you! Your response has been recorded successfully. Your data has been saved to the research database.';
+    btn.textContent = 'Submitted ✓';
     document.getElementById('progress-fill').style.width = '100%';
-    document.getElementById('progress-label').textContent = 'Completed — thank you!';
+    document.getElementById('progress-label').textContent = 'Survey complete — thank you for your participation!';
   } catch (err) {
     statusEl.className = 'status-msg error';
-    statusEl.textContent = 'Submission error. Please check your Script URL and try again. (' + err.message + ')';
+    statusEl.textContent = 'Submission error: ' + err.message + '. Please try again.';
     btn.disabled = false;
     btn.textContent = 'Submit Survey Response';
   }
